@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4th Wall Breakers — Indie VR/AR Game Studio</title>
+  <meta name="description" content="4th Wall Breakers is an indie VR/AR game studio breaking barriers and crafting thrilling, innovative experiences since 2018." />
+  <meta name="theme-color" content="#0a0a0f" />
+
+  <!-- Open Graph / social -->
+  <meta property="og:title" content="4th Wall Breakers — Indie VR/AR Game Studio" />
+  <meta property="og:description" content="Breaking barriers and crafting thrilling, innovative VR/AR experiences since 2018." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://4thwallbreakers.com" />
+  <meta property="og:image" content="https://4thwallbreakers.com/assets/logo-white.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="assets/favicon.ico" sizes="any" />
+  <link rel="icon" href="assets/favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/favicon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Animated background -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <header class="nav" id="nav">
+    <a href="#top" class="brand" aria-label="4th Wall Breakers home">
+      <img src="assets/mark.png" alt="" class="brand__mark" />
+      <span class="brand__name">4th Wall <strong>Breakers</strong></span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#games">Games</a>
+      <a href="#awards">Awards</a>
+      <a href="#about">About</a>
+      <a href="#contact" class="nav__cta">Contact</a>
+    </nav>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <div class="hero__video" aria-hidden="true">
+      <video class="hero__bg" autoplay muted loop playsinline preload="auto" poster="assets/hero-poster.jpg">
+        <source src="assets/hero.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="hero__overlay" aria-hidden="true"></div>
+    <div class="hero__inner">
+      <p class="hero__kicker reveal">Indie VR / AR Game Studio</p>
+      <h1 class="hero__logo reveal"><img src="assets/logo-lockup.png" alt="4th Wall Breakers" /></h1>
+      <p class="hero__tagline reveal">
+        An award-winning game studio crafting thrilling, innovative
+        mixed reality experiences since 2018.
+      </p>
+      <div class="hero__actions reveal">
+        <a href="#games" class="btn btn--primary">View our games</a>
+        <a href="#contact" class="btn btn--ghost">Work with us</a>
+      </div>
+    </div>
+    <a href="#games" class="hero__scroll" aria-label="Scroll to games">
+      <span></span>
+    </a>
+  </section>
+
+  <!-- Games -->
+  <section class="games" id="games">
+    <div class="section-head reveal">
+      <p class="eyebrow">Portfolio</p>
+      <h2>Our games</h2>
+    </div>
+
+    <div class="features" id="gamesGrid">
+      <!-- feature rows injected by js/main.js -->
+    </div>
+  </section>
+
+  <!-- Awards -->
+  <section class="awards" id="awards">
+    <div class="section-head reveal">
+      <p class="eyebrow">Recognition</p>
+      <h2>Awards &amp; accolades</h2>
+    </div>
+    <div class="awards__grid" id="awardsGrid">
+      <!-- award cards injected by js/main.js -->
+    </div>
+  </section>
+
+  <!-- Partners -->
+  <section class="partners" id="partners">
+    <p class="partners__label reveal">Trusted by leading brands &amp; partners</p>
+    <div class="marquee">
+      <div class="marquee__track" id="partnersTrack"></div>
+      <div class="marquee__track" id="partnersTrack2" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- About Us -->
+  <section class="about" id="about">
+    <div class="about__intro reveal">
+      <p class="eyebrow">About Us</p>
+      <h2>We break the fourth wall.</h2>
+      <p class="about__lede">
+        We're a small, passionate team making fun, original games and
+        experiences for players of all ages. Since 2018 we've pushed the boundaries of VR, AR,
+        and mixed reality — shipping award-winning titles and
+        partnering with the likes of Meta, Google, Snap, and Pico to
+        bring bold new ideas to life.
+      </p>
+    </div>
+    <figure class="founder reveal">
+      <div class="founder__photo">
+        <img src="assets/founder.png" alt="Stephen Rogers, Founder of 4th Wall Breakers" />
+      </div>
+      <figcaption>
+        <span class="founder__name">Stephen Rogers</span>
+        <span class="founder__role">Founder</span>
+        <a class="founder__social" href="https://www.linkedin.com/in/stephen-rogers-6b7203152/" target="_blank" rel="noopener" aria-label="Stephen Rogers on LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+        </a>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <div class="contact__card reveal">
+      <p class="eyebrow">Get in touch</p>
+      <h2>Let's build something <span class="accent">unreal</span>.</h2>
+      <p>Have a project, a publishing opportunity, or just want to say hi? We'd love to hear from you.</p>
+      <a href="mailto:stephen@4thwallbreakers.com" class="btn btn--primary">stephen@4thwallbreakers.com</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <a href="#top" class="brand brand--footer" aria-label="4th Wall Breakers home">
+      <img src="assets/mark.png" alt="" class="brand__mark" />
+      <span class="brand__name">4th Wall <strong>Breakers</strong></span>
+    </a>
+    <p>&copy; <span id="year"></span> 4th Wall Breakers, LLC. All rights reserved.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
