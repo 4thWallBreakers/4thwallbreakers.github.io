@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Import a Custom Map — CoasterMania — 4th Wall Breakers</title>
+  <meta name="description" content="How to load your own .glb models and room scans into CoasterMania on Meta Quest: where the file goes, how to scan a room with Scaniverse, and where to find models." />
+  <meta name="theme-color" content="#081520" />
+
+  <meta property="og:title" content="Import a Custom Map — CoasterMania" />
+  <meta property="og:description" content="Load your own .glb models and room scans into CoasterMania on Meta Quest." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://4thwallbreakers.com/coastermania/import_maps" />
+  <meta property="og:image" content="https://4thwallbreakers.com/assets/logo-white.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="/assets/favicon.ico" sizes="any" />
+  <link rel="icon" href="/assets/favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/assets/favicon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" />
+
+  <!--
+    Deliberately self-contained: this page does NOT load css/style.css.
+
+    The site stylesheet styles bare element selectors — `section { padding: clamp(4rem,9vw,9rem) … }`
+    and a `* { margin:0; padding:0 }` reset — which fought this page's own layout and blew its
+    spacing apart. Rather than fight the cascade with overrides, the guide carries its own styles.
+    It keeps the site's favicons, meta and domain, and links back to the main site in both
+    directions, so it still belongs to 4thwallbreakers.com without inheriting its layout rules.
+  -->
+  <style>
+    /* Dark-committed on purpose: the rest of the site is always dark, so a light-mode guide
+       sitting next to it would read as a different website. Every colour is set explicitly, so
+       the page holds regardless of the visitor's OS theme. */
+    :root {
+      --ground:        #081520;
+      --surface:       #0E2233;
+      --surface-sunk:  #0A1B28;
+      --line:          #1E3A4E;
+      --text:          #E6EFF5;
+      --text-soft:     #92A7B6;
+      --accent:        #46C6E4;
+      --accent-strong: #7BDAF0;
+      --accent-wash:   #10303F;
+      --sand:          #E0A75B;
+      --sand-wash:     #2A2014;
+      --code-bg:       #061019;
+      --code-text:     #DDEAF1;
+      --shadow:        0 1px 2px rgba(0,0,0,.4), 0 8px 28px -14px rgba(0,0,0,.7);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--ground);
+      color: var(--text);
+      font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 3.5rem;
+    }
+
+    .backlink {
+      font-size: .9rem;
+      font-weight: 500;
+      color: var(--text-soft);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      width: fit-content;
+    }
+    .backlink:hover { color: var(--accent); }
+
+    .eyebrow {
+      font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 1.75rem 0 .9rem;
+    }
+    h1 {
+      font-family: "Outfit", ui-sans-serif, system-ui, sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.25rem, 6vw, 3.25rem);
+      line-height: 1.05;
+      letter-spacing: -.022em;
+      text-wrap: balance;
+      margin: 0 0 1rem;
+    }
+    .standfirst { font-size: 1.15rem; color: var(--text-soft); margin: 0; max-width: 60ch; }
+
+    h2 {
+      font-family: "Outfit", ui-sans-serif, system-ui, sans-serif;
+      font-weight: 600;
+      font-size: 1.6rem;
+      letter-spacing: -.014em;
+      line-height: 1.2;
+      text-wrap: balance;
+      margin: 0;
+    }
+    h3 {
+      font-family: "Outfit", ui-sans-serif, system-ui, sans-serif;
+      font-weight: 600;
+      font-size: 1.08rem;
+      letter-spacing: -.006em;
+      margin: 0 0 .3rem;
+      color: var(--text);
+    }
+
+    /* Class-scoped, never bare `section` — that is what collided with the site stylesheet. */
+    .block { display: flex; flex-direction: column; gap: 1.1rem; padding: 0; }
+    .lede { color: var(--text-soft); margin: 0; }
+    p { margin: 0; }
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+    a:hover { color: var(--accent-strong); }
+    strong { color: var(--text); font-weight: 600; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+    /* The drop path — the one fact people mistype. */
+    .pathcard {
+      background: var(--code-bg);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.35rem 1.4rem 1.2rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: .85rem;
+    }
+    .pathcard__label {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: .7rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0;
+    }
+    .pathcard__line { overflow-x: auto; padding-bottom: .2rem; }
+    .pathcard__line code {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: .96rem;
+      line-height: 1.5;
+      color: var(--code-text);
+      white-space: nowrap;
+      display: block;
+    }
+    .pathcard__line .dim { color: #7F98A8; }
+    .pathcard__line .hi  { color: var(--accent); font-weight: 600; }
+    .pathcard__row { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+    .pathcard__copy {
+      font: 600 .82rem/1 "IBM Plex Sans", system-ui, sans-serif;
+      color: #06202B;
+      background: var(--accent);
+      border: 0;
+      border-radius: 7px;
+      padding: .55rem .95rem;
+      cursor: pointer;
+      transition: filter .15s ease;
+    }
+    .pathcard__copy:hover { filter: brightness(1.08); }
+    .pathcard__hint {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: .78rem;
+      color: #7F98A8;
+      margin: 0;
+    }
+
+    /* Numbered because the order genuinely matters here. */
+    .steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1.4rem; counter-reset: s; }
+    .steps > li {
+      counter-increment: s;
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      gap: .1rem 1rem;
+      align-items: start;
+    }
+    .steps > li::before {
+      content: counter(s);
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-wash);
+      border-radius: 50%;
+      width: 2rem; height: 2rem;
+      display: grid; place-items: center;
+      grid-row: span 2;
+    }
+    .steps p { color: var(--text-soft); }
+
+    /* Reference facts — a definition list, not a sequence. */
+    .rules { margin: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+    .rules > div { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; padding: .85rem 1.1rem; border-bottom: 1px solid var(--line); }
+    .rules > div:last-child { border-bottom: 0; }
+    .rules dt {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: .78rem; letter-spacing: .04em; text-transform: uppercase;
+      color: var(--text-soft); padding-top: .15rem; margin: 0;
+    }
+    .rules dd { margin: 0; color: var(--text-soft); }
+    @media (max-width: 32rem) { .rules > div { grid-template-columns: 1fr; gap: .2rem; } }
+
+    code {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: .9em;
+      background: var(--surface-sunk);
+      border: 1px solid var(--line);
+      padding: .08em .38em;
+      border-radius: 5px;
+      color: var(--text);
+    }
+
+    .resources { display: flex; flex-direction: column; gap: .9rem; }
+    .resource {
+      display: flex; flex-direction: column; gap: .25rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1rem 1.15rem;
+    }
+    .resource__name { font-family: "Outfit", sans-serif; font-weight: 600; font-size: 1.02rem; color: var(--text); }
+    .resource p { color: var(--text-soft); font-size: .95rem; }
+
+    .note {
+      border-left: 3px solid var(--sand);
+      background: var(--sand-wash);
+      padding: .95rem 1.15rem;
+      border-radius: 0 10px 10px 0;
+      display: flex; flex-direction: column; gap: .35rem;
+    }
+    .note__title { font-family: "Outfit", sans-serif; font-weight: 600; color: var(--sand); font-size: .95rem; }
+    .note p { font-size: .95rem; color: var(--text-soft); }
+
+    .divider { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+    .pagefoot {
+      border-top: 1px solid var(--line);
+      padding-top: 1.75rem;
+      display: flex; flex-direction: column; gap: .5rem;
+      color: var(--text-soft); font-size: .9rem;
+    }
+    .pagefoot a { font-weight: 500; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header>
+      <a class="backlink" href="/">&larr; 4th Wall Breakers</a>
+      <p class="eyebrow">CoasterMania · Guide</p>
+      <h1>Import a custom map</h1>
+      <p class="standfirst">Drop a <strong>.glb</strong> model onto your headset and CoasterMania will offer it as an environment &mdash; a scan of your own room, a model you found online, or something you built yourself.</p>
+    </header>
+
+    <div class="block">
+      <h2>Where the file goes</h2>
+      <p class="lede">One folder on the headset's internal storage. CoasterMania creates it for you the first time it runs, so it's already there waiting.</p>
+
+      <div class="pathcard">
+        <p class="pathcard__label">Drop folder</p>
+        <div class="pathcard__line">
+          <code><span class="dim">Internal shared storage /</span> Android / data / <span class="hi">com.FourthWallStudios.CoasterMania</span> / files / <span class="hi">Environments</span></code>
+        </div>
+        <div class="pathcard__row">
+          <button class="pathcard__copy" id="copyPath" type="button">Copy path</button>
+          <p class="pathcard__hint">Android/data/com.FourthWallStudios.CoasterMania/files/Environments</p>
+        </div>
+      </div>
+
+      <dl class="rules">
+        <div>
+          <dt>Format</dt>
+          <dd><code>.glb</code> only. It's the one 3D format CoasterMania can open while the game is running &mdash; <code>.fbx</code>, <code>.obj</code> and <code>.gltf</code> won't be listed.</dd>
+        </div>
+        <div>
+          <dt>Location</dt>
+          <dd>Files must sit directly inside <code>Environments</code>. Anything in a subfolder is ignored.</dd>
+        </div>
+        <div>
+          <dt>Naming</dt>
+          <dd>The file name becomes the name you see in game. <code>Living Room.glb</code> shows up as <strong>Living Room</strong>.</dd>
+        </div>
+        <div>
+          <dt>Refresh</dt>
+          <dd>No restart needed. The folder is re-read every time you open the environment picker, so you can add a file with the headset still on.</dd>
+        </div>
+      </dl>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="block">
+      <h2>Getting the file across</h2>
+      <p class="lede">Either route works &mdash; use whichever is in front of you.</p>
+
+      <ol class="steps">
+        <li>
+          <h3>From a computer, over USB</h3>
+          <p>Plug the headset in, then put it on and accept the <strong>Allow access to data</strong> prompt &mdash; nothing appears on the computer until you do. The headset then shows up as a drive. Navigate to the path above and copy your <code>.glb</code> in.</p>
+        </li>
+        <li>
+          <h3>On the headset itself</h3>
+          <p>Open the <strong>Files</strong> app, go to <em>Internal storage</em>, and follow the same path. Useful if you downloaded a model in the headset's browser &mdash; move it out of <em>Downloads</em> and into <em>Environments</em>.</p>
+        </li>
+        <li>
+          <h3>Pick it in game</h3>
+          <p>Start a new world and step through the environment carousel past the built-in ones. Your imports appear at the end, listed by file name.</p>
+        </li>
+      </ol>
+
+      <div class="note">
+        <span class="note__title">If your file doesn't appear</span>
+        <p>It's almost always one of three things: the extension isn't <code>.glb</code>, the file landed in a subfolder, or it's still sitting in <em>Downloads</em>. Only <code>.glb</code> files at the top level of that folder are listed.</p>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="block">
+      <h2>Scanning your own room</h2>
+      <p class="lede">A phone scan of a real space is the most striking thing you can put in here &mdash; your coaster running through your actual living room. <strong>Scaniverse</strong> is free on iOS and Android and exports the format we need.</p>
+
+      <ol class="steps">
+        <li>
+          <h3>Scan the space</h3>
+          <p>Walk the room slowly, sweeping the phone back across surfaces you've already covered &mdash; that overlap is what lets it stitch the space together. Even lighting helps; strong sun through a window tends to punch holes in the result.</p>
+        </li>
+        <li>
+          <h3>Export as GLB</h3>
+          <p>Once processing finishes, use Scaniverse's share or export option and choose <strong>GLB</strong> from the format list. The other formats will export happily, but CoasterMania won't list them.</p>
+        </li>
+        <li>
+          <h3>Move it to the headset</h3>
+          <p>Get the file onto a computer &mdash; AirDrop, a cable, or any cloud drive &mdash; then copy it into the <code>Environments</code> folder using the path above.</p>
+        </li>
+      </ol>
+
+      <div class="note">
+        <span class="note__title">Keep the texture size down</span>
+        <p>Scanning apps routinely export a single 8192&nbsp;&times;&nbsp;8192 texture, which unpacks to roughly 340&nbsp;MB in memory. CoasterMania automatically shrinks anything larger than 2048&nbsp;px, but it still has to decode the original first &mdash; so a scan exported at a lower texture resolution loads noticeably faster. If Scaniverse offers a quality or resolution choice on export, medium is usually plenty for a room you're standing in.</p>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="block">
+      <h2>Where to find models</h2>
+      <p class="lede">Anything that exports to GLB will work. A few good places to start:</p>
+
+      <div class="resources">
+        <div class="resource">
+          <span class="resource__name">Sketchfab</span>
+          <p>The largest library of downloadable 3D scenes, with a big Creative Commons section and GLB among the standard download formats. Filter by <em>Downloadable</em>, and check the licence before using anything publicly.</p>
+        </div>
+        <div class="resource">
+          <span class="resource__name">Polycam</span>
+          <p>Another phone scanning app, with a public gallery of community scans &mdash; real places captured by other people, many of them downloadable.</p>
+        </div>
+        <div class="resource">
+          <span class="resource__name">Poly Haven</span>
+          <p>Free, no-attribution assets. Smaller, and focused more on individual models and environments than whole scenes, but everything there is genuinely unrestricted.</p>
+        </div>
+        <div class="resource">
+          <span class="resource__name">Blender</span>
+          <p>If you'd rather build one: Blender is free and exports GLB directly via <em>File &rarr; Export &rarr; glTF 2.0</em>, choosing the <strong>.glb</strong> binary option.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <span class="note__title">Scale and orientation</span>
+        <p>CoasterMania places you at the model's own origin and treats it as a life-size space, so a model authored in centimetres will feel enormous and one authored at miniature scale will feel like a dollhouse. If a map feels wrong the moment you arrive, rescale it in Blender and re-export &mdash; that's usually all it needs.</p>
+      </div>
+    </div>
+
+    <footer class="pagefoot">
+      <p>Still stuck? Use the <strong>Report a bug</strong> button in the game's menu and tell us what you tried &mdash; including the file name and where the model came from.</p>
+      <p><a href="/">&larr; Back to 4th Wall Breakers</a></p>
+      <p>&copy; <span id="year">2026</span> 4th Wall Breakers, LLC.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    (function () {
+      var y = document.getElementById('year');
+      if (y) y.textContent = new Date().getFullYear();
+
+      var btn = document.getElementById('copyPath');
+      if (!btn) return;
+      var PATH = 'Android/data/com.FourthWallStudios.CoasterMania/files/Environments';
+      btn.addEventListener('click', function () {
+        var done = function () {
+          var old = btn.textContent;
+          btn.textContent = 'Copied';
+          setTimeout(function () { btn.textContent = old; }, 1600);
+        };
+        var fallback = function () {
+          var ta = document.createElement('textarea');
+          ta.value = PATH;
+          ta.setAttribute('readonly', '');
+          ta.style.position = 'absolute';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); done(); } catch (e) { btn.textContent = 'Copy failed'; }
+          document.body.removeChild(ta);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(PATH).then(done, fallback);
+        } else {
+          fallback();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
